@@ -1,7 +1,10 @@
-.vscode/
+.vscode/imgui.ini
+.vscode/settings.json
 .idea/
 build/
 builddir/
 
 /subprojects/*
 !/subprojects/*.wrap
+/subprojects/spdlog.wrap
+/subprojects/vrockutils.wrap

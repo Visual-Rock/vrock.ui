@@ -1,5 +1,7 @@
 #include "vrock/ui/Application.hpp"
 
+#include <vrock/log/Logger.hpp>
+
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
@@ -7,18 +9,18 @@
 
 namespace vrock::ui
 {
-    auto Application::run( std::shared_ptr<ImGuiBaseWidget> root ) -> int
+    auto Application::run( ApplicationConfig config, std::shared_ptr<ImGuiBaseWidget> root ) -> int
     {
-        // logger->log->info( "initializing Window" );
+        logger->log->info( "initializing Window" );
         GLFWwindow *window;
 
         /* Initialize the library */
         if ( !glfwInit( ) )
             return -1;
 
-        // logger->log->info( "creating Window" );
+        logger->log->info( "creating Window" );
         /* Create a windowed mode window and its OpenGL context */
-        window = glfwCreateWindow( 640, 480, "vrock.ui", NULL, NULL );
+        window = glfwCreateWindow( config.width, config.height, config.application_name.c_str(), NULL, NULL );
         if ( !window )
         {
             glfwTerminate( );
@@ -27,17 +29,20 @@ namespace vrock::ui
 
         /* Make the window's context current */
         glfwMakeContextCurrent( window );
+        
+        logger->log->info( "initializing ImGui" );
 
-        // logger->log->info( "initializing ImGui" );
+        rename = [&] ( std::string title ) { glfwSetWindowTitle( window, title.c_str() ); };
 
         IMGUI_CHECKVERSION( );
         ImGui::CreateContext( );
         ImGuiIO &io = ImGui::GetIO( );
         ImGui_ImplGlfw_InitForOpenGL( window, true );
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags = config.config_flags;
+        io.BackendFlags = config.backend_flags;
         ImGui_ImplOpenGL3_Init( "#version 330" );
 
-        // logger->log->info( "initializing Main Window" );
+        logger->log->info( "initializing Main Window" );
         root->setup( );
 
         /* Loop until the user closes the window */
@@ -59,7 +64,8 @@ namespace vrock::ui
             /* Poll for and process events */
             glfwPollEvents( );
         }
-        // logger->log->info( "cleanup" );
+        logger->log->info( "cleanup" );
+        rename = [&] ( std::string title ) { logger->log->info( "can't rename window after cleanup!" ); };
         root->terminate( );
         ImGui_ImplOpenGL3_Shutdown( );
         ImGui_ImplGlfw_Shutdown( );
@@ -67,5 +73,10 @@ namespace vrock::ui
 
         glfwTerminate( );
         return 0;
+    }
+
+    auto Application::rename_window( std::string title ) -> void
+    {
+        rename( title );
     }
 } // namespace vrock::ui

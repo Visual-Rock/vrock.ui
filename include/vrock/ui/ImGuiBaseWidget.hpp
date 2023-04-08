@@ -1,13 +1,20 @@
 #pragma once
 
 #include <imgui.h>
+#include <memory>
+
+#ifndef VROCKUI_API
+#define VROCKUI_API
+#endif
 
 namespace vrock::ui
 {
-    class ImGuiBaseWidget
+    class Application;
+
+    class VROCKUI_API ImGuiBaseWidget
     {
     public:
-        ImGuiBaseWidget( );
+        ImGuiBaseWidget( std::shared_ptr<vrock::ui::Application> app );
         ~ImGuiBaseWidget( );
 
         virtual void setup( ) = 0;
@@ -19,6 +26,7 @@ namespace vrock::ui
 
     protected:
         bool visibility = true;
+        std::shared_ptr<vrock::ui::Application> app;
 
         bool t = true;
         bool f = false;

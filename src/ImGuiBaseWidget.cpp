@@ -2,7 +2,7 @@
 
 namespace vrock::ui
 {
-    ImGuiBaseWidget::ImGuiBaseWidget( )
+    ImGuiBaseWidget::ImGuiBaseWidget( std::shared_ptr<vrock::ui::Application> app ) : app( app )
     {
     }
     ImGuiBaseWidget::~ImGuiBaseWidget( )
