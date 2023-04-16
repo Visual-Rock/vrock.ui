@@ -1,8 +1,8 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <string>
-#include <functional>
 
 #include "ImGuiBaseWidget.hpp"
 
@@ -10,7 +10,7 @@
 
 namespace vrock::ui
 {
-    class VROCKUI_API ApplicationConfig 
+    class VROCKUI_API ApplicationConfig
     {
     public:
         std::string application_name = "vrock.ui";
@@ -34,8 +34,10 @@ namespace vrock::ui
         auto run( ApplicationConfig config, std::shared_ptr<ImGuiBaseWidget> root ) -> int;
 
         auto rename_window( std::string title ) -> void;
-    protected:
+
         std::shared_ptr<log::Logger> logger;
+
+    protected:
         std::function<void( std::string )> rename;
     };
 } // namespace vrock::ui

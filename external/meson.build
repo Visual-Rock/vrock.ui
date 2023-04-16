@@ -3,8 +3,8 @@ if host_machine.system() == 'darwin'
   add_languages('objcpp')
 endif
 
-include_dirs = include_directories('imgui', 'imgui/backends')
-sources = files(
+im_include_dirs = include_directories('imgui', 'imgui/backends')
+im_sources = files(
   'imgui/misc/cpp/imgui_stdlib.cpp',
   'imgui/imgui.cpp',
   'imgui/imgui_demo.cpp',
@@ -14,22 +14,22 @@ sources = files(
 )
 
 cpp = meson.get_compiler('cpp')
-dependencies = []
+im_dependencies = []
 
 libgl_dep = dependency('gl')
 if libgl_dep.found()
-  sources += 'imgui/backends/imgui_impl_opengl3.cpp'
-  dependencies += libgl_dep
-  dependencies += cpp.find_library('dl', required: false)
+  im_sources += 'imgui/backends/imgui_impl_opengl3.cpp'
+  im_dependencies += libgl_dep
+  im_dependencies += cpp.find_library('dl', required: false)
 endif
 glfw_dep = dependency('glfw3')
 if glfw_dep.found()
-  sources += 'imgui/backends/imgui_impl_glfw.cpp'
-  dependencies += glfw_dep
+  im_sources += 'imgui/backends/imgui_impl_glfw.cpp'
+  im_dependencies += glfw_dep
 endif
 glad_dep = dependency('glew')
 if glad_dep.found()
-  dependencies += glad_dep
+  im_dependencies += glad_dep
 endif
 
 api = '-DIMGUI_API=__attribute__((visibility("default")))'
@@ -39,11 +39,11 @@ endif
 
 imgui = library(
   'imgui',
-  sources,
+  im_sources,
   cpp_args: api,
   gnu_symbol_visibility: 'hidden',
-  dependencies: dependencies,
-  include_directories: include_dirs,
+  dependencies: im_dependencies,
+  include_directories: im_include_dirs,
 )
 
 if host_machine.system() == 'windows'
@@ -52,10 +52,12 @@ endif
 
 imgui_dep = declare_dependency(
   compile_args: api,
-  include_directories: include_dirs,
+  include_directories: im_include_dirs,
   link_with: imgui,
-  dependencies: dependencies,
+  dependencies: im_dependencies,
 )
+
+subdir('./tinyfiledialog/')
 
 if get_option('tests')
 
