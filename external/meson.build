@@ -3,9 +3,10 @@ if host_machine.system() == 'darwin'
   add_languages('objcpp')
 endif
 
-im_include_dirs = include_directories('imgui', 'imgui/backends')
+im_include_dirs = include_directories('imgui', 'imgui/backends', 'imgui_theme')
 im_sources = files(
   'imgui/misc/cpp/imgui_stdlib.cpp',
+  'imgui/misc/freetype/imgui_freetype.cpp',
   'imgui/imgui.cpp',
   'imgui/imgui_demo.cpp',
   'imgui/imgui_draw.cpp',
@@ -17,6 +18,8 @@ cpp = meson.get_compiler('cpp')
 im_dependencies = []
 
 libgl_dep = dependency('gl')
+libfreetype_dep = dependency('freetype')
+im_dependencies += libfreetype_dep 
 if libgl_dep.found()
   im_sources += 'imgui/backends/imgui_impl_opengl3.cpp'
   im_dependencies += libgl_dep

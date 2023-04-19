@@ -1,7 +1,8 @@
 src = [
     'ImGuiBaseWidget.cpp',
     'Application.cpp',
-    'FileDialogs.cpp'
+    'FileDialogs.cpp',
+    '../external/imgui_theme/spectrum.cpp'
 ]
 
 header = [

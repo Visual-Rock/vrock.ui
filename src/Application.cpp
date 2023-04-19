@@ -5,7 +5,12 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#define SPECTRUM_USE_DARK_THEME
+#include <spectrum.h>
+
 #include <GLFW/glfw3.h>
+
+#include "font.h"
 
 namespace vrock::ui
 {
@@ -20,7 +25,7 @@ namespace vrock::ui
 
         logger->log->info( "creating Window" );
         /* Create a windowed mode window and its OpenGL context */
-        window = glfwCreateWindow( config.width, config.height, config.application_name.c_str(), NULL, NULL );
+        window = glfwCreateWindow( config.width, config.height, config.application_name.c_str( ), NULL, NULL );
         if ( !window )
         {
             glfwTerminate( );
@@ -29,10 +34,10 @@ namespace vrock::ui
 
         /* Make the window's context current */
         glfwMakeContextCurrent( window );
-        
+
         logger->log->info( "initializing ImGui" );
 
-        rename = [&] ( std::string title ) { glfwSetWindowTitle( window, title.c_str() ); };
+        rename = [ & ]( std::string title ) { glfwSetWindowTitle( window, title.c_str( ) ); };
 
         IMGUI_CHECKVERSION( );
         ImGui::CreateContext( );
@@ -41,6 +46,12 @@ namespace vrock::ui
         io.ConfigFlags = config.config_flags;
         io.BackendFlags = config.backend_flags;
         ImGui_ImplOpenGL3_Init( "#version 330" );
+
+        ImGui::Spectrum::StyleColorsSpectrum( );
+
+        ImFont *font = io.Fonts->AddFontFromMemoryCompressedTTF( roboto_compressed_data, roboto_compressed_size, 18.0 );
+        if ( font )
+            io.FontDefault = font;
 
         logger->log->info( "initializing Main Window" );
         root->setup( );
@@ -65,7 +76,7 @@ namespace vrock::ui
             glfwPollEvents( );
         }
         logger->log->info( "cleanup" );
-        rename = [&] ( std::string title ) { logger->log->info( "can't rename window after cleanup!" ); };
+        rename = [ & ]( std::string title ) { logger->log->info( "can't rename window after cleanup!" ); };
         root->terminate( );
         ImGui_ImplOpenGL3_Shutdown( );
         ImGui_ImplGlfw_Shutdown( );
