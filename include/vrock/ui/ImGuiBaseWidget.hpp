@@ -2,6 +2,8 @@
 
 #define IMGUI_ENABLE_FREETYPE
 #include <imgui.h>
+#include <misc/cpp/imgui_stdlib.h>
+
 #include <memory>
 
 #ifndef VROCKUI_API
