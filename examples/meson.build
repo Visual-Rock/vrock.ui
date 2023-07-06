@@ -12,4 +12,10 @@ example_modalDialog = executable(
     dependencies: uilib_dep
 )
 
+# Close Dialog Example
+example_modalDialog = executable(
+    'example_closeDialog', 'example_closeDialog.cpp',
+    dependencies: uilib_dep
+)
+
 endif

@@ -89,6 +89,49 @@
                 "mode": "build"
             },
             "console": "externalTerminal"
+        },
+        {
+            "name": "Close Dialog Example",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/builddir/examples/example_closeDialog",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/builddir",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "preLaunchTask": {
+                "type": "meson",
+                "mode": "build"
+            },
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Close Dialog Example (Windows)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/builddir/examples/example_closeDialog.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/builddir",
+            "environment": [],
+            "preLaunchTask": {
+                "type": "meson",
+                "mode": "build"
+            },
+            "console": "externalTerminal"
         }
     ]
 }

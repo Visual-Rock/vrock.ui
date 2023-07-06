@@ -25,9 +25,13 @@ namespace vrock::ui
             return closed;
         }
 
-        std::string title;
+        auto get_title( ) -> std::string
+        {
+            return title;
+        }
 
     private:
+        std::string title;
         bool closed = false;
     };
 
