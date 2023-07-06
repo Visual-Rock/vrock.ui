@@ -209,11 +209,10 @@ namespace vrock::ui
                 if ( !new_dialogs.empty( ) )
                     for ( auto &nd : new_dialogs )
                         if ( d == nd )
-                            ImGui::OpenPopup( d->get_title( ).c_str( ),
-                                              ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking );
+                            ImGui::OpenPopup( d->get_title( ).c_str( ), d->get_flags( ) );
 
                 bool t = true;
-                if ( ImGui::BeginPopupModal( d->get_title( ).c_str( ), &t ) )
+                if ( ImGui::BeginPopupModal( d->get_title( ).c_str( ), &t, d->get_flags( ) ) )
                 {
                     d->render( );
                     ImGui::EndPopup( );

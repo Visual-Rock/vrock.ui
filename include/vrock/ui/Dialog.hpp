@@ -7,7 +7,8 @@ namespace vrock::ui
     class Dialog : public ImGuiBaseWidget
     {
     public:
-        Dialog( std::shared_ptr<vrock::ui::Application> app, std::string title )
+        Dialog( std::shared_ptr<vrock::ui::Application> app, std::string title,
+                ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking )
             : ImGuiBaseWidget( app ), title( title ), closed( false )
         {
         }
@@ -30,9 +31,15 @@ namespace vrock::ui
             return title;
         }
 
+        auto get_flags( ) -> ImGuiWindowFlags
+        {
+            return flags;
+        }
+
     private:
         std::string title;
         bool closed = false;
+        ImGuiWindowFlags flags;
     };
 
     template <class T>
@@ -41,7 +48,9 @@ namespace vrock::ui
     template <DefaultConstructible T> class ModalDialog : public Dialog
     {
     public:
-        ModalDialog( std::shared_ptr<vrock::ui::Application> app, std::string title ) : Dialog( app, title )
+        ModalDialog( std::shared_ptr<vrock::ui::Application> app, std::string title,
+                     ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking )
+            : Dialog( app, title, flags )
         {
         }
         ~ModalDialog( )

@@ -4,7 +4,8 @@ class DialogClose : public vrock::ui::ModalDialog<bool>
 {
 public:
     DialogClose( std::shared_ptr<vrock::ui::Application> app, std::string title )
-        : vrock::ui::ModalDialog<bool>( app, title )
+        : vrock::ui::ModalDialog<bool>( app, std::move( title ),
+                                        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking )
     {
     }
 
