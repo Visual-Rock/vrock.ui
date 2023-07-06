@@ -31,13 +31,16 @@ namespace vrock::ui
         {
         }
 
-        auto run( ApplicationConfig config, std::shared_ptr<ImGuiBaseWidget> root ) -> int;
+        auto run( const ApplicationConfig &config, std::shared_ptr<ImGuiBaseWidget> root ) -> int;
 
-        auto rename_window( std::string title ) -> void;
+        auto rename_window( const std::string &title ) -> void;
+        auto close_handler( std::function<bool( )> fn ) -> void;
 
         std::shared_ptr<log::Logger> logger;
 
     protected:
-        std::function<void( std::string )> rename;
+        std::function<void( const std::string & )> rename;
+        std::function<bool( )> close_handler_ = []( ) { return true; };
+        bool should_close = false;
     };
 } // namespace vrock::ui

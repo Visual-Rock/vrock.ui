@@ -15,6 +15,15 @@ public_header = include_directories('../include')
 log_dep = dependency('vrocklog')
 fmt_dep = dependency('fmt')
 
+renderer = []
+
+if get_option('renderer') == 'vulkan'
+  renderer = '-DVROCKUI_VULKAN=1'
+endif
+if get_option('renderer') == 'opengl'
+  renderer = '-DVROCKUI_OPENGL=1'
+endif
+
 api = '-DVROCKUI_API=__attribute__((visibility("default")))'
 if host_machine.system() == 'windows'
   api = '-DVROCKUI_API=@0@'.format(get_option('default_library') != 'static' ? '__declspec(dllexport)' : '')
@@ -22,7 +31,7 @@ endif
 
 uilib = library(meson.project_name(), src,
     include_directories: public_header,
-    cpp_args: api,
+    cpp_args: [api, renderer ],
     gnu_symbol_visibility: 'hidden',
     dependencies: [ imgui_dep, log_dep, tfd_dep, fmt_dep ]
 )

@@ -1,3 +1,5 @@
 option('tests', type: 'boolean', value: false, description: 'build tests for vrock.ui')
 option('examples', type: 'boolean', value: false, description: 'build examples for vrock.ui')
 option('docs', type: 'boolean', value: false, description: 'build docs for vrock.ui')
+
+option('renderer', type: 'combo', choices: ['vulkan', 'opengl'], value: 'vulkan', description: 'build imgui with vulkan')
