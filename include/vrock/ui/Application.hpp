@@ -34,6 +34,7 @@ namespace vrock::ui
         auto run( const ApplicationConfig &config, std::shared_ptr<ImGuiBaseWidget> root ) -> int;
 
         auto rename_window( const std::string &title ) -> void;
+
         auto close_handler( std::function<bool( )> fn ) -> void;
 
         std::shared_ptr<log::Logger> logger;

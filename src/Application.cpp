@@ -266,4 +266,9 @@ namespace vrock::ui
     {
         rename( title );
     }
+
+    auto Application::close_handler( std::function<bool( )> fn ) -> void
+    {
+        close_handler_ = fn;
+    }
 } // namespace vrock::ui
