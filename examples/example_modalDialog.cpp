@@ -1,5 +1,7 @@
 #include "vrock/ui/Application.hpp"
 
+#include "vrock/utils/FutureHelper.hpp"
+
 class DialogSelectNumber : public vrock::ui::ModalDialog<int>
 {
 public:
@@ -45,7 +47,7 @@ public:
         {
             if ( ImGui::Button( "open" ) )
                 number = app->open_modal_dialog<int>( std::make_shared<DialogSelectNumber>( app, "Select a Number" ) );
-            if ( number.valid( ) && number.wait_for( std::chrono::milliseconds( 0 ) ) == std::future_status::ready )
+            if ( number.valid( ) && vrock::utils::future_ready( number ) )
             {
                 vrock::log::get_logger( "ui" )->log->debug( "number: {}", number.get( ) );
                 number = std::shared_future<int>( );

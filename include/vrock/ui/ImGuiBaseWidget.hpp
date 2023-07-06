@@ -24,7 +24,7 @@ namespace vrock::ui
         virtual void render( ) = 0;
         virtual void terminate( ) = 0;
 
-        auto get_visibility( ) -> bool;
+        auto get_visibility( ) const -> bool;
         auto set_visibility( bool new_visibility ) -> void;
 
     protected:

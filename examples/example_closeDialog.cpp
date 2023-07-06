@@ -42,7 +42,7 @@ public:
             // open the Dialog
             auto res = app->open_modal_dialog<bool>( std::make_shared<DialogClose>( app, "Alert" ) );
             // wait for response
-            while ( res.wait_for( std::chrono::milliseconds( 10 ) ) != std::future_status::ready )
+            while ( vrock::utils::future_ready( res, std::chrono::milliseconds( 10 ) ) )
             {
             }
             // return User choice

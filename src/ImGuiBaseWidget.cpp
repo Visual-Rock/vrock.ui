@@ -9,7 +9,7 @@ namespace vrock::ui
     {
     }
 
-    auto ImGuiBaseWidget::get_visibility( ) -> bool
+    auto ImGuiBaseWidget::get_visibility( ) const -> bool
     {
         return visibility;
     }

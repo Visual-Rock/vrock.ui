@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ImGuiBaseWidget.hpp"
+#include "vrock/utils/FutureHelper.hpp"
 
 namespace vrock::ui
 {
@@ -55,7 +56,7 @@ namespace vrock::ui
         }
         ~ModalDialog( )
         {
-            if ( future.wait_for( std::chrono::milliseconds( 0 ) ) != std::future_status::ready )
+            if ( !utils::future_ready( future ) )
                 result.set_value( T( ) );
         }
 

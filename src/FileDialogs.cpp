@@ -82,4 +82,29 @@ namespace vrock::ui
             return "";
         return { ret };
     }
+
+    auto open_file_async( const std::string &title, const std::string &default_path,
+                          std::vector<Filter> filter_patterns ) -> std::shared_future<std::string>
+    {
+        return std::async( &open_file, title, default_path, filter_patterns ).share( );
+    }
+
+    auto open_multiple_files_async( const std::string &title, const std::string &default_path,
+                                    std::vector<Filter> filter_patterns )
+        -> std::shared_future<std::vector<std::string>>
+    {
+        return std::async( &open_multiple_files, title, default_path, filter_patterns ).share( );
+    }
+
+    auto select_folder_async( const std::string &title, const std::string &default_path )
+        -> std::shared_future<std::string>
+    {
+        return std::async( &select_folder, title, default_path ).share( );
+    }
+
+    auto save_file_async( const std::string &title, const std::string &default_path,
+                          std::vector<Filter> filter_patterns ) -> std::shared_future<std::string>
+    {
+        return std::async( &save_file, title, default_path, filter_patterns ).share( );
+    }
 } // namespace vrock::ui
