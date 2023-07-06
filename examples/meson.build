@@ -6,4 +6,10 @@ example_simple = executable(
     dependencies: uilib_dep
 )
 
+# Modal Dialog Example
+example_modalDialog = executable(
+    'example_modalDialog', 'example_modalDialog.cpp',
+    dependencies: uilib_dep
+)
+
 endif

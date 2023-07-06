@@ -19,7 +19,6 @@
 
 #include "font.h"
 
-#include <future>
 #include <memory>
 
 static void glfw_error_callback( int error, const char *description )
@@ -200,9 +199,31 @@ namespace vrock::ui
             ImGui_ImplOpenGL3_NewFrame( );
 #endif
             ImGui_ImplGlfw_NewFrame( );
+
             ImGui::NewFrame( );
 
             root->render( );
+
+            for ( auto &d : dialogs )
+            {
+                if ( !new_dialogs.empty( ) )
+                    for ( auto &nd : new_dialogs )
+                        if ( d == nd )
+                            ImGui::OpenPopup( d->title.c_str( ),
+                                              ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking );
+
+                bool t = true;
+                if ( ImGui::BeginPopupModal( d->title.c_str( ), &t ) )
+                {
+                    d->render( );
+                    ImGui::EndPopup( );
+                }
+                else
+                    d->close( );
+            }
+            if ( !new_dialogs.empty( ) )
+                new_dialogs.clear( );
+            std::erase_if( dialogs, []( auto d ) { return d->is_closed( ); } );
 
             ImGui::Render( );
 #if defined( VROCKUI_VULKAN )
