@@ -1,18 +1,16 @@
 #include "vrock/ui/Image.hpp"
 
-#include "imgui.h"
-
-#include "stb/stb_image.h"
+#include <imgui.h>
+#include <imgui_impl_vulkan.h>
+#include <stb/stb_image.h>
 
 #include "vrock/ui/Application.hpp"
-
-#include <imgui_impl_vulkan.h>
 
 using namespace vrock::ui::internal;
 
 namespace vrock::ui
 {
-    auto bytes_pre_pixel( const ImageFormat &format ) -> std::uint32_t
+    auto bytes_per_pixel( const ImageFormat &format ) -> std::uint32_t
     {
         switch ( format )
         {
@@ -29,6 +27,8 @@ namespace vrock::ui
     {
         switch ( format )
         {
+        case ImageFormat::None:
+            return (VkFormat)0;
         case ImageFormat::RGBA:
             return VK_FORMAT_R8G8B8A8_UNORM;
         case ImageFormat::RGBA32F:
@@ -42,10 +42,8 @@ namespace vrock::ui
         VkPhysicalDeviceMemoryProperties prop;
         vkGetPhysicalDeviceMemoryProperties( get_physical_device( ), &prop );
         for ( uint32_t i = 0; i < prop.memoryTypeCount; i++ )
-        {
             if ( ( prop.memoryTypes[ i ].propertyFlags & properties ) == properties && type_bits & ( 1 << i ) )
                 return i;
-        }
 
         return 0xffffffff;
     }
@@ -69,7 +67,7 @@ namespace vrock::ui
         width = w;
         height = h;
 
-        allocate( width * height * bytes_pre_pixel( format ) );
+        allocate( width * height * bytes_per_pixel( format ) );
         set_data( data );
         stbi_image_free( data );
     }
@@ -77,7 +75,7 @@ namespace vrock::ui
     Image::Image( std::uint32_t w, std::uint32_t h, ImageFormat f, const void *data )
         : width( w ), height( h ), format( f )
     {
-        allocate( width * height * bytes_pre_pixel( format ) );
+        allocate( width * height * bytes_per_pixel( format ) );
         if ( data )
             set_data( data );
     }
@@ -98,14 +96,14 @@ namespace vrock::ui
         height = h;
 
         release( );
-        allocate( width * height * bytes_pre_pixel( format ) );
+        allocate( width * height * bytes_per_pixel( format ) );
     }
 
     auto Image::set_data( const void *data ) -> void
     {
         VkDevice device = internal::get_device( );
 
-        size_t upload_size = width * height * bytes_pre_pixel( format );
+        size_t upload_size = width * height * bytes_per_pixel( format );
 
         VkResult err;
 
@@ -285,16 +283,17 @@ namespace vrock::ui
 
     auto Image::release( ) -> void
     {
-        internal::submit_resource_free( [ & ]( ) {
-            VkDevice device = internal::get_device( );
+        internal::submit_resource_free(
+            [ s = sampler, iv = image_view, i = image, m = memory, b = buffer, dm = device_memory ]( ) {
+                VkDevice device = internal::get_device( );
 
-            vkDestroySampler( device, sampler, nullptr );
-            vkDestroyImageView( device, image_view, nullptr );
-            vkDestroyImage( device, image, nullptr );
-            vkFreeMemory( device, memory, nullptr );
-            vkDestroyBuffer( device, buffer, nullptr );
-            vkFreeMemory( device, device_memory, nullptr );
-        } );
+                vkDestroySampler( device, s, nullptr );
+                vkDestroyImageView( device, iv, nullptr );
+                vkDestroyImage( device, i, nullptr );
+                vkFreeMemory( device, m, nullptr );
+                vkDestroyBuffer( device, b, nullptr );
+                vkFreeMemory( device, dm, nullptr );
+            } );
 
         sampler = nullptr;
         image_view = nullptr;
