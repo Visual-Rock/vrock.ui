@@ -10,6 +10,8 @@
 
 #include "vrock/log/Logger.hpp"
 
+#include <vulkan/vulkan.h>
+
 namespace vrock::ui
 {
     class VROCKUI_API ApplicationConfig
@@ -57,4 +59,19 @@ namespace vrock::ui
         std::vector<std::shared_ptr<Dialog>> dialogs = { };
         std::vector<std::shared_ptr<Dialog>> new_dialogs = { };
     };
+
+    namespace internal
+    {
+        void check_vk_result( VkResult err );
+
+        auto get_command_buffer( bool start ) -> VkCommandBuffer;
+
+        auto flush_command_buffer( VkCommandBuffer buff ) -> void;
+
+        auto submit_resource_free( std::function<void( )> &&func ) -> void;
+
+        auto get_device( ) -> VkDevice;
+
+        auto get_physical_device( ) -> VkPhysicalDevice;
+    } // namespace internal
 } // namespace vrock::ui

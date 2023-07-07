@@ -67,7 +67,6 @@ int main( )
 
     auto app_config = vrock::ui::ApplicationConfig( );
     app_config.application_name = "simple example";
-    app_config.config_flags |= ImGuiConfigFlags_DockingEnable;
 
     auto app = std::make_shared<vrock::ui::Application>( vrock::log::create_logger( log_cfg ) );
     app->run( app_config, std::make_shared<MainWindow>( app ) );

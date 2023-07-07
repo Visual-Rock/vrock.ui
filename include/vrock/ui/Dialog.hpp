@@ -5,7 +5,7 @@
 
 namespace vrock::ui
 {
-    class Dialog : public ImGuiBaseWidget
+    class VROCKUI_API Dialog : public ImGuiBaseWidget
     {
     public:
         Dialog( std::shared_ptr<vrock::ui::Application> app, std::string title,
@@ -46,7 +46,7 @@ namespace vrock::ui
     template <class T>
     concept DefaultConstructible = std::is_trivially_default_constructible_v<T>;
 
-    template <DefaultConstructible T> class ModalDialog : public Dialog
+    template <DefaultConstructible T> class VROCKUI_API ModalDialog : public Dialog
     {
     public:
         ModalDialog( std::shared_ptr<vrock::ui::Application> app, std::string title,
