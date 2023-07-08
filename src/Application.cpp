@@ -1,7 +1,9 @@
 #include "vrock/ui/Application.hpp"
 
 #include <utility>
+
 #include <vrock/log/Logger.hpp>
+#include <vrock/utils/Timer.hpp>
 
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_vulkan.h>
@@ -487,9 +489,12 @@ namespace vrock::ui
         root->setup( );
 
         std::unique_ptr<std::future<bool>> close = nullptr;
-        /* Loop until the user closes the window */
+
+        utils::Timer timer;
+
         while ( !should_close )
         {
+            timer.reset( );
             // close handling
             if ( glfwWindowShouldClose( window ) && close == nullptr )
             {
@@ -573,6 +578,8 @@ namespace vrock::ui
             // Present Main Platform Window
             if ( !main_is_minimized )
                 FramePresent( wd );
+
+            delta = (float)timer.elapsed<std::chrono::nanoseconds>( ) * 0.000000001f;
         }
         logger->log->debug( "cleanup" );
         rename = [ & ]( const std::string &title ) { logger->log->debug( "can't rename window after cleanup!" ); };

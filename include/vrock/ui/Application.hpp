@@ -40,7 +40,8 @@ namespace vrock::ui
 
         auto run( const ApplicationConfig &config, std::shared_ptr<ImGuiBaseWidget> root ) -> int;
 
-        template <class T> auto open_modal_dialog( std::shared_ptr<ModalDialog<T>> dialog ) -> std::shared_future<T>
+        template <class T>
+        auto open_modal_dialog( std::shared_ptr<ModalDialog<T>> dialog ) -> std::shared_future<T>
         {
             std::promise<T> p;
             dialog->set_promise( std::move( p ) );
@@ -59,9 +60,17 @@ namespace vrock::ui
         auto rename_window( const std::string &title ) -> void;
         auto close_handler( std::function<bool( )> fn ) -> void;
 
+        /// @brief in seconds
+        auto inline get_delta( ) -> float
+        {
+            return delta;
+        }
+
         std::shared_ptr<log::Logger> logger;
 
     protected:
+        float delta = 0;
+
         std::function<void( const std::string & )> rename;
         std::function<bool( )> close_handler_ = []( ) { return true; };
         bool should_close = false;
