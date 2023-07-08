@@ -7,14 +7,14 @@
 
 namespace vrock::ui
 {
-    enum class ImageFormat
+    enum class VROCKUI_API ImageFormat
     {
         None = 0,
         RGBA,
         RGBA32F
     };
 
-    class Image
+    class VROCKUI_API Image
     {
     public:
         explicit Image( const std::string &path );

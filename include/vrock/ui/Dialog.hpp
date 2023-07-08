@@ -43,10 +43,7 @@ namespace vrock::ui
         ImGuiWindowFlags flags;
     };
 
-    template <class T>
-    concept DefaultConstructible = std::is_trivially_default_constructible_v<T>;
-
-    template <DefaultConstructible T> class VROCKUI_API ModalDialog : public Dialog
+    template <class T> class VROCKUI_API ModalDialog : public Dialog
     {
     public:
         ModalDialog( std::shared_ptr<vrock::ui::Application> app, std::string title,

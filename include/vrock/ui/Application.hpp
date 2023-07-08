@@ -40,8 +40,7 @@ namespace vrock::ui
 
         auto run( const ApplicationConfig &config, std::shared_ptr<ImGuiBaseWidget> root ) -> int;
 
-        template <DefaultConstructible T>
-        auto open_modal_dialog( std::shared_ptr<ModalDialog<T>> dialog ) -> std::shared_future<T>
+        template <class T> auto open_modal_dialog( std::shared_ptr<ModalDialog<T>> dialog ) -> std::shared_future<T>
         {
             std::promise<T> p;
             dialog->set_promise( std::move( p ) );
