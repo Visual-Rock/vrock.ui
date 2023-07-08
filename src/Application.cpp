@@ -5,9 +5,6 @@
 
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_vulkan.h>
-#define GLFW_INCLUDE_NONE
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
 
 #define SPECTRUM_USE_DARK_THEME
 #include <spectrum.h>
@@ -17,6 +14,8 @@
 #include <memory>
 
 using namespace vrock::ui::internal;
+
+static GLFWwindow *window = nullptr;
 
 static VkAllocationCallbacks *g_Allocator = NULL;
 static VkInstance g_Instance = VK_NULL_HANDLE;
@@ -381,7 +380,6 @@ namespace vrock::ui
     {
         logger->log->debug( "initializing Window" );
         glfwSetErrorCallback( glfw_error_callback );
-        GLFWwindow *window;
 
         /* Initialize the library */
         if ( !glfwInit( ) )
@@ -404,6 +402,9 @@ namespace vrock::ui
             log::get_logger( "ui" )->log->error( "Vulkan not supported!" );
             return -1;
         }
+
+        glfwSetInputMode( window, GLFW_STICKY_KEYS, GLFW_TRUE );
+
         uint32_t extensions_count = 0;
         const char **extensions = glfwGetRequiredInstanceExtensions( &extensions_count );
         SetupVulkan( extensions, extensions_count );
@@ -601,6 +602,28 @@ namespace vrock::ui
         return 0;
     }
 
+    auto Application::key_down( KeyCode key ) -> bool
+    {
+        int status = glfwGetKey( window, (int)key );
+        return status == GLFW_PRESS || status == GLFW_REPEAT;
+    }
+
+    auto Application::mouse_button_pressed( MouseButton button ) -> bool
+    {
+        return glfwGetMouseButton( window, (int)button ) == GLFW_PRESS;
+    }
+    auto Application::mouse_position( ) -> std::pair<double, double>
+    {
+        double x, y;
+        glfwGetCursorPos( window, &x, &y );
+        return std::make_pair( x, y );
+    }
+
+    auto Application::cursor_mode( CursorMode mode ) -> void
+    {
+        glfwSetInputMode( window, GLFW_CURSOR, GLFW_CURSOR_NORMAL + (int)mode );
+    }
+
     auto Application::rename_window( const std::string &title ) -> void
     {
         rename( title );
@@ -678,6 +701,11 @@ namespace vrock::ui
         auto submit_resource_free( std::function<void( )> &&func ) -> void
         {
             s_ResourceFreeQueue[ s_CurrentFrameIndex ].emplace_back( func );
+        }
+
+        auto get_window( ) -> GLFWwindow *
+        {
+            return window;
         }
 
         auto get_device( ) -> VkDevice

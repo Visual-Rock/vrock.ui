@@ -33,8 +33,9 @@ namespace vrock::ui
             return VK_FORMAT_R8G8B8A8_UNORM;
         case ImageFormat::RGBA32F:
             return VK_FORMAT_R32G32B32A32_SFLOAT;
+        default:
+            return (VkFormat)0;
         }
-        return (VkFormat)0;
     }
 
     auto vulkan_memory_type( VkMemoryPropertyFlags properties, std::uint32_t type_bits ) -> std::uint32_t

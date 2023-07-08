@@ -7,10 +7,13 @@
 
 #include "Dialog.hpp"
 #include "ImGuiBaseWidget.hpp"
+#include "KeyCode.hpp"
 
 #include "vrock/log/Logger.hpp"
 
-#include <vulkan/vulkan.h>
+#define GLFW_INCLUDE_NONE
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
 
 namespace vrock::ui
 {
@@ -47,6 +50,13 @@ namespace vrock::ui
             return dialog->get_future( );
         }
 
+        auto key_down( KeyCode ) -> bool;
+
+        auto mouse_button_pressed( MouseButton ) -> bool;
+        auto mouse_position( ) -> std::pair<double, double>;
+
+        auto cursor_mode( CursorMode ) -> void;
+
         auto rename_window( const std::string &title ) -> void;
         auto close_handler( std::function<bool( )> fn ) -> void;
 
@@ -69,6 +79,8 @@ namespace vrock::ui
         auto flush_command_buffer( VkCommandBuffer buff ) -> void;
 
         auto submit_resource_free( std::function<void( )> &&func ) -> void;
+
+        auto get_window( ) -> GLFWwindow *;
 
         auto get_device( ) -> VkDevice;
 
