@@ -27,8 +27,6 @@ namespace vrock::ui
     {
         switch ( format )
         {
-        case ImageFormat::None:
-            return (VkFormat)0;
         case ImageFormat::RGBA:
             return VK_FORMAT_R8G8B8A8_UNORM;
         case ImageFormat::RGBA32F:
