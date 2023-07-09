@@ -84,27 +84,26 @@ namespace vrock::ui
     }
 
     auto open_file_async( const std::string &title, const std::string &default_path,
-                          std::vector<Filter> filter_patterns ) -> std::shared_future<std::string>
+                          const std::vector<Filter> &filter_patterns ) -> std::future<std::string>
     {
-        return std::async( &open_file, title, default_path, filter_patterns ).share( );
+        return std::async( &open_file, title, default_path, filter_patterns );
     }
 
     auto open_multiple_files_async( const std::string &title, const std::string &default_path,
-                                    std::vector<Filter> filter_patterns )
-        -> std::shared_future<std::vector<std::string>>
+                                    const std::vector<Filter> &filter_patterns )
+        -> std::future<std::vector<std::string>>
     {
-        return std::async( &open_multiple_files, title, default_path, filter_patterns ).share( );
+        return std::async( &open_multiple_files, title, default_path, filter_patterns );
     }
 
-    auto select_folder_async( const std::string &title, const std::string &default_path )
-        -> std::shared_future<std::string>
+    auto select_folder_async( const std::string &title, const std::string &default_path ) -> std::future<std::string>
     {
-        return std::async( &select_folder, title, default_path ).share( );
+        return std::async( &select_folder, title, default_path );
     }
 
     auto save_file_async( const std::string &title, const std::string &default_path,
-                          std::vector<Filter> filter_patterns ) -> std::shared_future<std::string>
+                          const std::vector<Filter> &filter_patterns ) -> std::future<std::string>
     {
-        return std::async( &save_file, title, default_path, filter_patterns ).share( );
+        return std::async( &save_file, title, default_path, filter_patterns );
     }
 } // namespace vrock::ui
